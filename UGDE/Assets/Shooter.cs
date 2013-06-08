@@ -4,6 +4,7 @@ using System.Collections;
 public class Shooter : MonoBehaviour
 {
   public Rigidbody bullet;
+  public AudioClip sound;
   public float power = 1500f;
   public float moveSpeed = 2f;
 
@@ -19,6 +20,8 @@ public class Shooter : MonoBehaviour
       Rigidbody instance = Instantiate(bullet, transform.position, transform.rotation) as Rigidbody;
       Vector3 fwd = transform.TransformDirection(Vector3.forward);
       instance.AddForce(fwd * power);
+
+      audio.PlayOneShot(sound, 1.0f);
     }
   }
 }
