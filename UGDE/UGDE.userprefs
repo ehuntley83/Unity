@@ -1,8 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerCollisions.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TriggerZone.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerCollisions.cs" Line="34" Column="36" />
+      <File FileName="Assets\Scripts\PlayerCollisions.cs" Line="18" Column="46" />
+      <File FileName="Assets\Scripts\DoorManager.cs" Line="45" Column="63" />
+      <File FileName="Assets\Scripts\TriggerZone.cs" Line="11" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
