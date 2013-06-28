@@ -2,11 +2,12 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TriggerZone.cs">
     <Files>
-      <File FileName="Assets\Scripts\PowerCell.cs" Line="19" Column="27" />
+      <File FileName="Assets\Scripts\TriggerZone.cs" Line="29" Column="70" />
+      <File FileName="Assets\Scripts\PowerCell.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PlayerCollisions.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\DoorManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TriggerZone.cs" Line="20" Column="41" />
-      <File FileName="Assets\Scripts\Inventory.cs" Line="31" Column="14" />
+      <File FileName="Assets\Scripts\Inventory.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TextHints.cs" Line="25" Column="8" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
