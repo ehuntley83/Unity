@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\DoorManager.cs" />
      <Compile Include="Assets\Scripts\Inventory.cs" />
      <Compile Include="Assets\Scripts\MainMenuButtons.cs" />
+     <Compile Include="Assets\Scripts\MainMenuGUI.cs" />
      <Compile Include="Assets\Scripts\Matches.cs" />
      <Compile Include="Assets\Scripts\PlayerCollisions.cs" />
      <Compile Include="Assets\Scripts\PowerCell.cs" />
@@ -66,20 +67,20 @@
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>
- <Reference Include="System.ServiceModel">
- <HintPath>Assets\Plugins\System.ServiceModel.dll</HintPath>
- </Reference>
  <Reference Include="System.Runtime.Serialization">
  <HintPath>Assets\Plugins\System.Runtime.Serialization.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Security">
+ <HintPath>Assets\Plugins\System.Security.dll</HintPath>
+ </Reference>
+ <Reference Include="System.ServiceModel">
+ <HintPath>Assets\Plugins\System.ServiceModel.dll</HintPath>
  </Reference>
  <Reference Include="System.Web">
  <HintPath>Assets\Plugins\System.Web.dll</HintPath>
  </Reference>
  <Reference Include="System.Web.Services">
  <HintPath>Assets\Plugins\System.Web.Services.dll</HintPath>
- </Reference>
- <Reference Include="System.Security">
- <HintPath>Assets\Plugins\System.Security.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
