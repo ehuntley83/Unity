@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
@@ -17,7 +18,9 @@ public class MainMenuGUI : MonoBehaviour
   {
     main,
     instructions,
-    wbidLogin
+    wbidLogin,
+    wbidWaiting,
+    wbidLoginComplete
   };
 
   private Rect menuAreaNormalized;
@@ -25,6 +28,8 @@ public class MainMenuGUI : MonoBehaviour
 
   private string wbid = "WBID";
   private string password = "PASSWORD";
+  private string authenticateWbidResult = String.Empty;
+  private string amsTicket = String.Empty;
 
   void Start()
   {
@@ -41,8 +46,10 @@ public class MainMenuGUI : MonoBehaviour
 
     GUI.BeginGroup(menuAreaNormalized);
 
-    if (currentPage == menuPage.main)
+    switch (currentPage)
     {
+    case menuPage.main:
+
       if (GUI.Button(playButton, "Play"))
       {
         StartCoroutine("ButtonAction", "Island");
@@ -61,18 +68,22 @@ public class MainMenuGUI : MonoBehaviour
       {
         StartCoroutine("ButtonAction", "quit");
       }
-    }
-    else if (currentPage == menuPage.instructions)
-    {
+
+      break;
+
+    case menuPage.instructions:
+
       GUI.Label(instructions, "You awake on a mysterious island... Find a way to signal for help or face certain doom!");
       if (GUI.Button(quitButton, "Back"))
       {
         audio.PlayOneShot(beep);
         currentPage = menuPage.main;
       }
-    }
-    else if (currentPage == menuPage.wbidLogin)
-    {
+
+      break;
+
+    case menuPage.wbidLogin:
+
       GUI.Label(instructions, "Please enter your WBID email and password");
 
       wbid = GUI.TextField(new Rect(instructions.x, instructions.y + 50.0f, wbidButton.width, wbidButton.height), wbid);
@@ -80,8 +91,10 @@ public class MainMenuGUI : MonoBehaviour
 
       if (GUI.Button(new Rect(instructions.x, instructions.y + 150.0f, wbidButton.width, wbidButton.height), "Submit"))
       {
+        audio.PlayOneShot(beep);
         var wbidAuthenticator = gameObject.GetComponent("WbidAuthenticator") as WbidAuthenticator;
-        wbidAuthenticator.AuthenticateWbid(wbid, password);
+        wbidAuthenticator.AuthenticateWbid(wbid, password, AuthenticateWbidCallback, this);
+        currentPage = menuPage.wbidWaiting;
       }
 
       if (GUI.Button(new Rect(instructions.x, instructions.y + 200.0f, wbidButton.width, wbidButton.height), "Cancel"))
@@ -89,6 +102,30 @@ public class MainMenuGUI : MonoBehaviour
         audio.PlayOneShot(beep);
         currentPage = menuPage.main;
       }
+
+      break;
+
+    case menuPage.wbidWaiting:
+
+      GUI.Label(instructions, "Logging in...");
+      if (GUI.Button(quitButton, "Cancel"))
+      {
+        audio.PlayOneShot(beep);
+        currentPage = menuPage.main;
+      }
+
+      break;
+
+    case menuPage.wbidLoginComplete:
+
+      GUI.Label(instructions, authenticateWbidResult + "\n" + amsTicket);
+      if (GUI.Button(quitButton, "Continue"))
+      {
+        audio.PlayOneShot(beep);
+        currentPage = menuPage.main;
+      }
+
+      break;
     }
 
     GUI.EndGroup();
@@ -106,6 +143,26 @@ public class MainMenuGUI : MonoBehaviour
     else
     {
       Application.Quit();
+    }
+  }
+
+  void AuthenticateWbidCallback(object sender, AuthenticateWbidCompletedEventArgs result)
+  {
+    if (this == result.UserState && currentPage == menuPage.wbidWaiting)
+    {
+      if (null == result.Error)
+      {
+        amsTicket = result.Result;
+        authenticateWbidResult = "Success:";
+      }
+      else
+      {
+        amsTicket = result.Error.Message;
+        authenticateWbidResult = "Error:";
+      }
+
+      currentPage = menuPage.wbidLoginComplete;
+      Debug.Log(amsTicket);
     }
   }
 }
