@@ -7,11 +7,13 @@ public class MainMenuGUI : MonoBehaviour
 {
   public AudioClip beep;
   public GUISkin menuSkin;
+  public float busyIndicatorRotateSpeed;
   public Rect menuArea;
   public Rect playButton;
   public Rect instructionsButton;
   public Rect wbidButton;
   public Rect quitButton;
+  public Rect busyIndicator;
   public Rect instructions;
 
   private enum menuPage
@@ -25,6 +27,8 @@ public class MainMenuGUI : MonoBehaviour
 
   private Rect menuAreaNormalized;
   private menuPage currentPage = menuPage.main;
+  private float rotationAngle = 0.0f;
+  private Vector2 pivotPoint;
 
   private string wbid = "WBID";
   private string password = "PASSWORD";
@@ -108,11 +112,20 @@ public class MainMenuGUI : MonoBehaviour
     case menuPage.wbidWaiting:
 
       GUI.Label(instructions, "Logging in...");
+
+      // Create a rotating button to show the progress
+      pivotPoint = new Vector2(busyIndicator.x + (busyIndicator.width * 0.5f), busyIndicator.y + (busyIndicator.height * 0.5f));
+      GUIUtility.RotateAroundPivot (rotationAngle, pivotPoint);
+      GUI.Button(busyIndicator, "");
+      // Reset the rotation so we only rotate the progress button
+      GUIUtility.RotateAroundPivot (-rotationAngle, pivotPoint);
+
       if (GUI.Button(quitButton, "Cancel"))
       {
         audio.PlayOneShot(beep);
         currentPage = menuPage.main;
       }
+      rotationAngle += busyIndicatorRotateSpeed;
 
       break;
 
@@ -124,6 +137,7 @@ public class MainMenuGUI : MonoBehaviour
         audio.PlayOneShot(beep);
         currentPage = menuPage.main;
       }
+      rotationAngle = 0.0f;
 
       break;
     }
