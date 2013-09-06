@@ -22,6 +22,9 @@ public class Inventory : MonoBehaviour
   private GUITexture matchGUIInstance;
   public GUITexture matchGUIPrefab;
 
+  // Win sequence
+  public GameObject winObject;
+
   // Use this for initialization
   void Start ()
   {
@@ -59,6 +62,7 @@ public class Inventory : MonoBehaviour
         Destroy(matchGUIInstance);
         haveMatches = false;
         fireIsLit = true;
+        winObject.SendMessage("GameOver");
       }
       else if (!haveMatches && !fireIsLit)
       {

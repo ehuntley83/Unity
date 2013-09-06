@@ -5,6 +5,7 @@ using System.Collections;
 public class WbidAuthenticator : MonoBehaviour
 {
   public string ClsUrl = "http://vm-sqa-temig01.test.turbine.com/CLS/WbAuthentication.asmx";
+  public string AmsProductName = "TestApp";
 
   private WbAuthentication wbAuthentication;
 
@@ -23,7 +24,7 @@ public class WbidAuthenticator : MonoBehaviour
   public void AuthenticateWbid(string wbid, string password, AuthenticateWbidCompletedEventHandler callback, object context)
   {
     wbAuthentication.AuthenticateWbidCompleted += (null != callback) ? callback : AuthenticateWbidCallback;
-    wbAuthentication.AuthenticateWbidAsync(String.Empty, "WBID", Guid.NewGuid().ToString(), wbid, password, "TAS", Guid.NewGuid().ToString(), context);
+    wbAuthentication.AuthenticateWbidAsync(String.Empty, "WBID", Guid.NewGuid().ToString(), wbid, password, AmsProductName, Guid.NewGuid().ToString(), context);
     Debug.Log("AuthenticateWbid Called");
   }
 

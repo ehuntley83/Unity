@@ -44,6 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Animator.cs" />
      <Compile Include="Assets\Scripts\Client Proxies\ClsServiceClient.cs" />
      <Compile Include="Assets\Scripts\Client Proxies\OLD_ClsServiceClient.cs" />
      <Compile Include="Assets\Scripts\CoconutThrower.cs" />
