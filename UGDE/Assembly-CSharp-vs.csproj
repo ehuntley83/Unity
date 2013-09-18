@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\PowerCell.cs" />
      <Compile Include="Assets\Scripts\Reloader.cs" />
      <Compile Include="Assets\Scripts\Shooter.cs" />
+     <Compile Include="Assets\Scripts\StartGame.cs" />
      <Compile Include="Assets\Scripts\TargetCollision.cs" />
      <Compile Include="Assets\Scripts\TextHints.cs" />
      <Compile Include="Assets\Scripts\ThrowTrigger.cs" />
