@@ -53,10 +53,18 @@ public class MainMenuGUI : MonoBehaviour
     switch (currentPage)
     {
     case menuPage.main:
-
-      if (GUI.Button(playButton, "Play"))
+      // Handle web streaming by disabling the Island until it's loaded
+      if (Application.CanStreamedLevelBeLoaded("Island"))
       {
-        StartCoroutine("ButtonAction", "Island");
+        if (GUI.Button(playButton, "Play"))
+        {
+          StartCoroutine("ButtonAction", "Island");
+        }
+      }
+      else
+      {
+        float percentLoaded = Application.GetStreamProgressForLevel("Island") * 100;
+        GUI.Box(new Rect(playButton), "Loading... " + percentLoaded.ToString("f0") + "% Loaded");
       }
       if (GUI.Button(instructionsButton, "Instructions"))
       {
@@ -68,9 +76,14 @@ public class MainMenuGUI : MonoBehaviour
         audio.PlayOneShot(beep);
         currentPage = menuPage.wbidLogin;
       }
-      if (GUI.Button(quitButton, "Quit"))
+      // Don't show Quit button if we're in a Web Player
+      if (Application.platform != RuntimePlatform.OSXWebPlayer &&
+          Application.platform != RuntimePlatform.WindowsWebPlayer)
       {
-        StartCoroutine("ButtonAction", "quit");
+        if (GUI.Button(quitButton, "Quit"))
+        {
+          StartCoroutine("ButtonAction", "quit");
+        }
       }
 
       break;
