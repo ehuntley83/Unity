@@ -43,9 +43,9 @@ public class FollowPath : MonoBehaviour
         else if (Type == FollowType.Lerp)
             transform.position = Vector3.Lerp(transform.position, _currentPoint.Current.position, Time.deltaTime * Speed);
 
-        // if we are close enough to our destination point, move our destination to the next point in the sequence
-        // we use sqare magnitude to gain the performance benefit of not having to perform the sqrt in the the 
-        // distance calculation, but that means that we have to square the MaxDistanceToGoal to be uniform
+        // if we are close enough to our destination point, move our destination to the next point in the sequence.
+        // we use sqare magnitude to gain the performance benefit of not having to perform the sqrt in the
+        // distance calculation, but that means that we have to square the MaxDistanceToGoal to be uniform.
         var distanceSquared = (transform.position - _currentPoint.Current.position).sqrMagnitude;
         if (distanceSquared < MaxDistanceToGoal * MaxDistanceToGoal)
             _currentPoint.MoveNext();
