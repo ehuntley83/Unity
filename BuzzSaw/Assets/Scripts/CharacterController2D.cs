@@ -27,11 +27,15 @@ public class CharacterController2D : MonoBehaviour
     private BoxCollider2D _boxCollider;
     private float _verticalDistanceBetweenRays;
     private float _horizontalDistanceBetweenRays;
+    private Vector3 _raycastTopLeft;
+    private Vector3 _raycastBottomRight;
+    private Vector3 _raycastBottomLeft;
 
     #region Public Methods
 
     public void Awake()
     {
+        HandleCollisions = true;
         State = new ControllerState2D();
         _transform = transform;
         _localScale = transform.localScale;
@@ -129,12 +133,54 @@ public class CharacterController2D : MonoBehaviour
 
     private void CalculateRayOrigins()
     {
-        
+        var size = new Vector2(_boxCollider.size.x * Mathf.Abs(_localScale.x), _boxCollider.size.y * Mathf.Abs(_localScale.y)) / 2;
+        var center = new Vector2(_boxCollider.offset.x * _localScale.x, _boxCollider.offset.y * _localScale.y);
+
+        _raycastTopLeft = _transform.position + new Vector3(center.x - size.x + SkinWidth, center.y + size.y - SkinWidth);
+        _raycastBottomRight = _transform.position + new Vector3(center.x + size.x - SkinWidth, center.y - size.y + SkinWidth);
+        _raycastBottomLeft = _transform.position + new Vector3(center.x - size.x + SkinWidth, center.y - size.y + SkinWidth);
     }
 
     private void MoveHorizontally(ref Vector2 deltaMovement)
     {
-        
+        var isGoingRight = deltaMovement.x > 0;
+        var rayDistance = Mathf.Abs(deltaMovement.x) + SkinWidth;
+        var rayDirection = isGoingRight ? Vector2.right : -Vector2.right;
+        var rayOrigin = isGoingRight ? _raycastBottomRight : _raycastBottomLeft;
+
+        for (var i = 0; i < TotalHorizontalRays; i++)
+        {
+            var rayVector = new Vector2(rayOrigin.x, rayDirection.y + (i * _verticalDistanceBetweenRays));
+            Debug.DrawRay(rayVector, rayDirection * rayDistance, Color.red);
+
+            var rayCastHit = Physics2D.Raycast(rayVector, rayDirection, rayDistance, PlatformMask);
+
+            if (!rayCastHit)
+                continue;
+
+            if (i == 0 && HandleHorizontalSlope(ref deltaMovement, Vector2.Angle(rayCastHit.normal, Vector2.up), isGoingRight))
+                break;
+
+            // if we've hit and we're not on a slope, we set our corrected deltaMovement and reset our rayDistance
+            // to the distance to the closest object we've hit because there's no need to cast farther than that
+            // distance from now on
+            deltaMovement.x = rayCastHit.point.x - rayVector.x;
+            rayDistance = Mathf.Abs(deltaMovement.x);
+
+            if (isGoingRight)
+            {
+                deltaMovement.x -= SkinWidth;
+                State.IsCollidingRight = true;
+            }
+            else
+            {
+                deltaMovement.x += SkinWidth;
+                State.IsCollidingLeft = true;
+            }
+
+            if (rayDistance < SkinWidth + 0.0001f)
+                break;
+        }
     }
 
     private void MoveVertically(ref Vector2 deltaMovement)
@@ -147,9 +193,9 @@ public class CharacterController2D : MonoBehaviour
         
     }
 
-    private void HandleHorizontalSlope(ref Vector2 deltaMovement, float angle, bool isGoingRight)
+    private bool HandleHorizontalSlope(ref Vector2 deltaMovement, float angle, bool isGoingRight)
     {
-
+        return false;
     }
 
     #endregion
