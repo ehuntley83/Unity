@@ -41,10 +41,10 @@ public class CharacterController2D : MonoBehaviour
         _localScale = transform.localScale;
         _boxCollider = GetComponent<BoxCollider2D>();
 
-        var colliderWidth = (_boxCollider.size.x * Mathf.Abs(_localScale.x)) - (SkinWidth * 2);
+        var colliderWidth = (_boxCollider.size.x * Mathf.Abs(transform.localScale.x)) - (SkinWidth * 2);
         _horizontalDistanceBetweenRays = colliderWidth / (TotalVerticalRays - 1);
 
-        var colliderHeight = (_boxCollider.size.y * Mathf.Abs(_localScale.y)) - (SkinWidth * 2);
+        var colliderHeight = (_boxCollider.size.y * Mathf.Abs(transform.localScale.y)) - (SkinWidth * 2);
         _verticalDistanceBetweenRays = colliderHeight / (TotalHorizontalRays - 1);
     }
 
@@ -150,7 +150,7 @@ public class CharacterController2D : MonoBehaviour
 
         for (var i = 0; i < TotalHorizontalRays; i++)
         {
-            var rayVector = new Vector2(rayOrigin.x, rayDirection.y + (i * _verticalDistanceBetweenRays));
+            var rayVector = new Vector2(rayOrigin.x, rayOrigin.y + (i * _verticalDistanceBetweenRays));
             Debug.DrawRay(rayVector, rayDirection * rayDistance, Color.red);
 
             var rayCastHit = Physics2D.Raycast(rayVector, rayDirection, rayDistance, PlatformMask);
