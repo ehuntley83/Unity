@@ -128,8 +128,6 @@ public class CharacterController2D : MonoBehaviour
                 MoveHorizontally(ref deltaMovement);
 
             MoveVertically(ref deltaMovement);
-
-            Debug.Log(State.IsGrounded);
         }
 
         _transform.Translate(deltaMovement, Space.World);
@@ -207,7 +205,7 @@ public class CharacterController2D : MonoBehaviour
     private void MoveVertically(ref Vector2 deltaMovement)
     {
         var isGoingUp = deltaMovement.y > 0;
-        var rayDistance = Mathf.Abs(deltaMovement.y + SkinWidth);
+        var rayDistance = Mathf.Abs(deltaMovement.y) + SkinWidth;
         var rayDirection = isGoingUp ? Vector2.up : -Vector2.up;
         var rayOrigin = isGoingUp ? _raycastTopLeft : _raycastBottomLeft;
 
