@@ -15,6 +15,7 @@ public class CharacterController2D : MonoBehaviour
     public ControllerState2D State { get; private set; }
     public bool HandleCollisions { get; set; }
     public GameObject StandingOn { get; private set; }
+    public Vector3 PlatformVelocity { get; private set; }
 
     public bool CanJump
     {
@@ -46,6 +47,8 @@ public class CharacterController2D : MonoBehaviour
     private Vector3 _raycastBottomRight;
     private Vector3 _raycastBottomLeft;
     private float _jumpIn;
+    private Vector3 _activeGlobalPlatformPoint;
+    private Vector3 _activeLocalPlatformPoint;
 
     #region Public Methods
 
@@ -86,7 +89,6 @@ public class CharacterController2D : MonoBehaviour
 
     public void Jump()
     {
-        // TODO: moving platforms work
         AddForce(new Vector2(0, Parameters.JumpMagnitude));
         _jumpIn = Parameters.JumpFrequency;
     }
@@ -133,8 +135,6 @@ public class CharacterController2D : MonoBehaviour
 
         _transform.Translate(deltaMovement, Space.World);
 
-        // TODO: addition moving platform code
-
         if (Time.deltaTime > 0)
             _velocity = deltaMovement / Time.deltaTime;
 
@@ -144,11 +144,30 @@ public class CharacterController2D : MonoBehaviour
 
         if (State.IsMovingUpSlope)
             _velocity.y = 0;
+
+        if (StandingOn != null)
+        {
+            _activeGlobalPlatformPoint = transform.position;
+            _activeLocalPlatformPoint = StandingOn.transform.InverseTransformPoint(transform.position);
+        }
     }
 
     private void HandlePlatforms()
     {
-        
+        if (StandingOn != null)
+        {
+            var newGlobalPlatformPoint = StandingOn.transform.TransformPoint(_activeLocalPlatformPoint);
+            var moveDistance = newGlobalPlatformPoint - _activeGlobalPlatformPoint;
+
+            if (moveDistance != Vector3.zero)
+                transform.Translate(moveDistance, Space.World);
+
+            PlatformVelocity = (newGlobalPlatformPoint - _activeGlobalPlatformPoint) / Time.deltaTime;
+        }
+        else
+            PlatformVelocity = Vector3.zero;
+
+        StandingOn = null;
     }
 
     private void CalculateRayOrigins()
@@ -257,6 +276,7 @@ public class CharacterController2D : MonoBehaviour
 
     private void HandleVerticalSlope(ref Vector2 deltaMovement)
     {
+        Debug.Log("here" + Time.deltaTime);
         var center = (_raycastBottomLeft.x + _raycastBottomRight.x) / 2;
         var direction = -Vector2.up;
 
