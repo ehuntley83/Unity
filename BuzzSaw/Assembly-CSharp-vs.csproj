@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\ControllerParameters2D.cs" />
      <Compile Include="Assets\Scripts\ControllerState2D.cs" />
      <Compile Include="Assets\Scripts\FollowPath.cs" />
+     <Compile Include="Assets\Scripts\JumpPlatform.cs" />
      <Compile Include="Assets\Scripts\PathDefinition.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
  <Reference Include="UnityEngine.UI">

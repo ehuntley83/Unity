@@ -49,6 +49,7 @@ public class CharacterController2D : MonoBehaviour
     private float _jumpIn;
     private Vector3 _activeGlobalPlatformPoint;
     private Vector3 _activeLocalPlatformPoint;
+    private GameObject _lastStandingOn;
 
     #region Public Methods
 
@@ -149,6 +150,22 @@ public class CharacterController2D : MonoBehaviour
         {
             _activeGlobalPlatformPoint = transform.position;
             _activeLocalPlatformPoint = StandingOn.transform.InverseTransformPoint(transform.position);
+
+            if (_lastStandingOn != StandingOn)
+            {
+                if (_lastStandingOn != null)
+                    _lastStandingOn.SendMessage("ControllerExit2D", this, SendMessageOptions.DontRequireReceiver);
+
+                StandingOn.SendMessage("ControllerEnter2D", this, SendMessageOptions.DontRequireReceiver);
+                _lastStandingOn = StandingOn;
+            }
+            else if (StandingOn != null)
+                StandingOn.SendMessage("ControllerStay2D", this, SendMessageOptions.DontRequireReceiver);
+        } // else if we're not standing on a platform *now*, but we were previously
+        else if (_lastStandingOn != null)
+        {
+            _lastStandingOn.SendMessage("ControllerExit2D", this, SendMessageOptions.DontRequireReceiver);
+            _lastStandingOn = null;
         }
     }
 
@@ -276,7 +293,6 @@ public class CharacterController2D : MonoBehaviour
 
     private void HandleVerticalSlope(ref Vector2 deltaMovement)
     {
-        Debug.Log("here" + Time.deltaTime);
         var center = (_raycastBottomLeft.x + _raycastBottomRight.x) / 2;
         var direction = -Vector2.up;
 
